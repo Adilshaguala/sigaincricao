@@ -1,21 +1,16 @@
-# Next.js template
+# SIGA — Sistema de Gestão de Inscrições
 
-This is a Next.js template with shadcn/ui.
+Formulário público de inscrição em dois passos, com dados pessoais, escolha do curso/centro de recursos e bloqueio dos dados após a submissão. A área administrativa permanece separada.
 
-## Adding components
-
-To add components to your app, run the following command:
+## Executar localmente
 
 ```bash
-npx shadcn@latest add button
+npm install
+copy .env.example .env
+npm run db:push
+npm run dev
 ```
 
-This will place the ui components in the `components` directory.
+Abra `http://localhost:3000` para aceder directamente ao formulário. A entrada administrativa está em `/admin`, com dashboard, gráficos, listagem de inscritos e fichas individuais.
 
-## Using components
-
-To use the components in your app, import them as follows:
-
-```tsx
-import { Button } from "@/components/ui/button";
-```
+As credenciais administrativas são definidas pelas variáveis `ADMIN_USERNAME`, `ADMIN_PASSWORD` e `ADMIN_NAME` no ficheiro `.env`. Depois da autenticação, o painel fica disponível em `/admin/dashboard`.
