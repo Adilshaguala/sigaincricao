@@ -1,6 +1,6 @@
 "use client"
 
-import { Controller, useFormContext } from "react-hook-form"
+import { Controller, useFormContext, useWatch } from "react-hook-form"
 import {
   Fragment,
   memo,
@@ -324,10 +324,21 @@ export function CourseFields({
   courses,
   centers,
 }: {
-  courses: { id: string; name: string }[]
+  courses: {
+    id: string
+    name: string
+    plan: string | null
+    centerIds: string[]
+  }[]
   centers: { id: string; name: string; location: string }[]
 }) {
-  const { control, trigger } = useFormContext<RegistrationValues>()
+  const { control, trigger, setValue, clearErrors } =
+    useFormContext<RegistrationValues>()
+  const courseId = useWatch({ control, name: "courseId" })
+  const selectedCourse = courses.find((course) => course.id === courseId)
+  const availableCenters = selectedCourse
+    ? centers.filter((center) => selectedCourse.centerIds.includes(center.id))
+    : []
   return (
     <FieldGroup>
       <EnrollmentSelect
@@ -336,15 +347,23 @@ export function CourseFields({
         placeholder="Selecione o curso"
         options={courses.map((course) => ({
           value: course.id,
-          label: course.name,
+          label: course.plan
+            ? `${course.name} — Plano ${course.plan}`
+            : course.name,
         }))}
+        onChange={() => {
+          setValue("resourceCenterId", "")
+          clearErrors("resourceCenterId")
+        }}
       />
       <EnrollmentSelect
         name="resourceCenterId"
         label="Centro de recursos"
-        placeholder="Selecione o centro"
+        placeholder={
+          courseId ? "Selecione o centro" : "Primeiro selecione o curso"
+        }
         description="Escolha o centro onde pretende receber apoio académico."
-        options={centers.map((center) => ({
+        options={availableCenters.map((center) => ({
           value: center.id,
           label: `${center.name} · ${center.location}`,
         }))}
@@ -380,7 +399,7 @@ export function CourseFields({
             <FieldContent>
               <FieldLabel htmlFor="declaration">
                 Confirmo que os dados são verdadeiros e compreendo que a
-                inscrição não poderá ser alterada após a submissão.{" "}
+                candidatura não poderá ser alterada após a submissão.{" "}
                 <span aria-hidden="true">*</span>
               </FieldLabel>
               {fieldState.invalid && (

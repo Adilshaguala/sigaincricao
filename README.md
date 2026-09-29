@@ -7,10 +7,16 @@ Formulário público de inscrição em dois passos, com dados pessoais, escolha 
 ```bash
 npm install
 copy .env.example .env
+```
+
+No `.env`, configure `DATABASE_URL` para PostgreSQL e defina `ADMIN_PASSWORD` e `ROOT_PASSWORD` com senhas próprias. Depois execute:
+
+```bash
 npm run db:push
+npm run db:seed
 npm run dev
 ```
 
-Abra `http://localhost:3000` para aceder directamente ao formulário. A entrada administrativa está em `/admin`, com dashboard, gráficos, listagem de inscritos e fichas individuais.
+Abra `http://localhost:3000` para aceder directamente ao formulário. A entrada administrativa está em `/admin`, com dashboard, gráficos, listagem de inscritos e fichas individuais. Em **Configurações**, há páginas próprias para o prazo das inscrições, cursos e centros de recursos. Os cursos podem ser associados a um ou mais centros; esta associação limita os centros disponíveis no formulário público. Cursos antigos sem associação continuam disponíveis em todos os centros até serem actualizados.
 
-As credenciais administrativas são definidas pelas variáveis `ADMIN_USERNAME`, `ADMIN_PASSWORD` e `ADMIN_NAME` no ficheiro `.env`. Depois da autenticação, o painel fica disponível em `/admin/dashboard`.
+O seeder cria duas contas na tabela `Administrator`: `admin` e `root`, além dos graus académicos usados na criação de cursos. Ambas as contas têm o mesmo acesso ao painel em `/admin`. Os nomes de utilizador podem ser alterados com `ADMIN_USERNAME` e `ROOT_USERNAME`. Repetir o seeder não altera senhas de contas existentes.

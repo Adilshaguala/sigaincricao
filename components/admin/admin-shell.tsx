@@ -14,6 +14,7 @@ export function AdminShell({
   return (
     <TooltipProvider>
       <SidebarProvider
+        className="h-svh min-h-0 overflow-hidden"
         style={
           {
             "--sidebar-width": "calc(var(--spacing) * 72)",
@@ -21,10 +22,10 @@ export function AdminShell({
           } as CSSProperties
         }
       >
-        <AppSidebar administrator={administrator} variant="inset" />
-        <SidebarInset className="min-w-0">
+        <AppSidebar administrator={administrator} />
+        <SidebarInset className="min-h-0 min-w-0 overflow-hidden">
           <SiteHeader />
-          <div className="@container/main flex flex-1 flex-col gap-4 p-4 md:gap-6 md:py-6 lg:px-6">
+          <div className="@container/main flex min-h-0 flex-1 flex-col overflow-auto p-4 lg:p-6">
             {children}
           </div>
         </SidebarInset>

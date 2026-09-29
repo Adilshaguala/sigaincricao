@@ -4,8 +4,8 @@ import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 
 export const metadata: Metadata = {
-  title: { default: "SIGA · Inscrições", template: "%s · SIGA" },
-  description: "Sistema de Gestão de Inscrições",
+  title: { default: "SIGA · Candidaturas", template: "%s · SIGA" },
+  description: "Sistema de Gestão de Candidaturas",
 }
 
 export default function RootLayout({
@@ -14,11 +14,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html
-      lang="pt"
-      suppressHydrationWarning
-      className="antialiased"
-    >
+    <html lang="pt" suppressHydrationWarning className="antialiased">
       <body>
         <ThemeProvider>{children}</ThemeProvider>
       </body>

@@ -32,7 +32,7 @@ export function DataTable({ data }: { data: RecentApplicationRow[] }) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Inscrições recentes</CardTitle>
+        <CardTitle>Candidaturas recentes</CardTitle>
         <CardDescription>Últimas candidaturas submetidas</CardDescription>
         <CardAction>
           <Button
@@ -98,7 +98,7 @@ export function DataTable({ data }: { data: RecentApplicationRow[] }) {
             ) : (
               <TableRow>
                 <TableCell colSpan={6} className="h-24 text-center">
-                  Nenhuma inscrição submetida.
+                  Nenhuma candidatura submetida.
                 </TableCell>
               </TableRow>
             )}

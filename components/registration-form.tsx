@@ -55,7 +55,12 @@ export function RegistrationForm({
   courses,
   centers,
 }: {
-  courses: { id: string; name: string }[]
+  courses: {
+    id: string
+    name: string
+    plan: string | null
+    centerIds: string[]
+  }[]
   centers: { id: string; name: string; location: string }[]
 }) {
   const [step, setStep] = useState("dados")
@@ -203,7 +208,7 @@ export function RegistrationForm({
           }}
         >
           <TabsList
-            aria-label="Etapas da inscrição"
+            aria-label="Etapas da candidatura"
             activateOnFocus={false}
             className="w-full"
           >
@@ -218,7 +223,7 @@ export function RegistrationForm({
           {serverState.error && !pending && (
             <Alert id="submission-error" tabIndex={-1} variant="destructive">
               <CircleAlert />
-              <AlertTitle>Não foi possível submeter a inscrição</AlertTitle>
+              <AlertTitle>Não foi possível submeter a candidatura</AlertTitle>
               <AlertDescription>{serverState.error}</AlertDescription>
             </Alert>
           )}
@@ -435,7 +440,7 @@ export function RegistrationForm({
                   ) : (
                     <ArrowRight data-icon="inline-end" />
                   )}
-                  {pending ? "A submeter..." : "Submeter inscrição"}
+                  {pending ? "A submeter..." : "Submeter candidatura"}
                 </Button>
               </div>
             </FieldGroup>

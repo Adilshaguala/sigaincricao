@@ -5,23 +5,54 @@ import type { Prisma } from "@prisma/client"
 import { requireAdmin } from "@/lib/admin-auth"
 import { prisma } from "@/lib/prisma"
 
-function studentWhere(filters: { query?: string; courseId?: string }) {
+function studentWhere(filters: {
+  query?: string
+  courseId?: string
+  centerId?: string
+  ids?: string[]
+}) {
   const query = filters.query?.trim().slice(0, 80) || ""
   const courseId = filters.courseId?.trim() || ""
+  const centerId = filters.centerId?.trim() || ""
+  const contains = { contains: query, mode: "insensitive" as const }
   const where: Prisma.UserWhereInput = {
-    application: courseId ? { is: { courseId } } : { isNot: null },
+    application:
+      courseId || centerId
+        ? {
+            is: {
+              ...(courseId ? { courseId } : {}),
+              ...(centerId ? { resourceCenterId: centerId } : {}),
+            },
+          }
+        : { isNot: null },
+    ...(filters.ids ? { id: { in: filters.ids } } : {}),
     ...(query
       ? {
           OR: [
-            { fullName: { contains: query } },
-            { idNumber: { contains: query } },
-            { phone: { contains: query } },
+            { fullName: contains },
+            { idNumber: contains },
+            { phone: contains },
+            { email: contains },
+            { application: { is: { course: { is: { name: contains } } } } },
+            {
+              application: { is: { course: { is: { shortName: contains } } } },
+            },
+            {
+              application: {
+                is: { resourceCenter: { is: { name: contains } } },
+              },
+            },
+            {
+              application: {
+                is: { resourceCenter: { is: { location: contains } } },
+              },
+            },
           ],
         }
       : {}),
   }
 
-  return { where, query, courseId }
+  return { where, query, courseId, centerId }
 }
 
 export async function getDashboardData() {
@@ -31,24 +62,37 @@ export async function getDashboardData() {
   startOfMonth.setDate(1)
   startOfMonth.setHours(0, 0, 0, 0)
 
-  const [totalCandidates, totalSubmitted, submittedThisMonth, activeCenters, applications] =
-    await Promise.all([
-      prisma.user.count(),
-      prisma.application.count(),
-      prisma.application.count({ where: { submittedAt: { gte: startOfMonth } } }),
-      prisma.resourceCenter.count({ where: { active: true } }),
-      prisma.application.findMany({
-        include: {
-          course: true,
-          resourceCenter: true,
-          user: { select: { id: true, fullName: true, gender: true, idNumber: true } },
+  const [
+    totalCandidates,
+    totalSubmitted,
+    submittedThisMonth,
+    activeCenters,
+    applications,
+  ] = await Promise.all([
+    prisma.user.count(),
+    prisma.application.count(),
+    prisma.application.count({ where: { submittedAt: { gte: startOfMonth } } }),
+    prisma.resourceCenter.count({ where: { active: true } }),
+    prisma.application.findMany({
+      include: {
+        course: true,
+        resourceCenter: true,
+        user: {
+          select: { id: true, fullName: true, gender: true, idNumber: true },
         },
-        orderBy: { submittedAt: "desc" },
-      }),
-    ])
+      },
+      orderBy: { submittedAt: "desc" },
+    }),
+  ])
 
-  const courseMap = new Map<string, { name: string; shortName: string; count: number }>()
-  const centerMap = new Map<string, { name: string; location: string; count: number }>()
+  const courseMap = new Map<
+    string,
+    { name: string; shortName: string; count: number }
+  >()
+  const centerMap = new Map<
+    string,
+    { name: string; location: string; count: number }
+  >()
   const genderMap = new Map<string, number>()
 
   for (const application of applications) {
@@ -70,12 +114,15 @@ export async function getDashboardData() {
     genderMap.set(gender, (genderMap.get(gender) ?? 0) + 1)
   }
 
-  const monthFormatter = new Intl.DateTimeFormat("pt-MZ", { month: "short" })
-  const monthlyTrend = Array.from({ length: 6 }, (_, index) => {
+  const monthFormatter = new Intl.DateTimeFormat("pt-MZ", {
+    month: "short",
+    timeZone: "Africa/Maputo",
+  })
+  const monthlyTrend = Array.from({ length: 12 }, (_, index) => {
     const date = new Date()
     date.setDate(1)
     date.setHours(0, 0, 0, 0)
-    date.setMonth(date.getMonth() - (5 - index))
+    date.setMonth(date.getMonth() - (11 - index))
     const nextMonth = new Date(date)
     nextMonth.setMonth(nextMonth.getMonth() + 1)
 
@@ -83,7 +130,7 @@ export async function getDashboardData() {
       label: monthFormatter.format(date).replace(".", ""),
       count: applications.filter(
         (application) =>
-          application.submittedAt >= date && application.submittedAt < nextMonth,
+          application.submittedAt >= date && application.submittedAt < nextMonth
       ).length,
     }
   })
@@ -104,32 +151,61 @@ export async function getDashboardData() {
   }
 }
 
-export async function getStudents(filters: { query?: string; courseId?: string }) {
+export async function getStudents() {
   await requireAdmin()
 
-  const { where, query, courseId } = studentWhere(filters)
-
-  const [students, total, courses] = await Promise.all([
-    prisma.user.findMany({
-      where,
-      include: {
-        application: { include: { course: true, resourceCenter: true } },
+  const [applications, courses, centers] = await Promise.all([
+    prisma.application.findMany({
+      select: {
+        user: {
+          select: {
+            id: true,
+            fullName: true,
+            idNumber: true,
+            phone: true,
+            email: true,
+          },
+        },
+        course: { select: { id: true, name: true, shortName: true } },
+        resourceCenter: { select: { id: true, name: true, location: true } },
+        submittedAt: true,
       },
-      orderBy: { application: { submittedAt: "desc" } },
-      take: 100,
+      orderBy: { submittedAt: "desc" },
     }),
-    prisma.user.count({ where }),
-    prisma.course.findMany({ where: { active: true }, orderBy: { name: "asc" } }),
+    prisma.course.findMany({
+      select: { id: true, name: true, shortName: true },
+      orderBy: { name: "asc" },
+    }),
+    prisma.resourceCenter.findMany({
+      select: { id: true, name: true, location: true },
+      orderBy: { name: "asc" },
+    }),
   ])
 
-  return { students, total, courses, query, courseId }
+  return {
+    students: applications.map(
+      ({ user, course, resourceCenter, submittedAt }) => ({
+        ...user,
+        course,
+        resourceCenter,
+        submittedAt: submittedAt.toISOString(),
+      })
+    ),
+    courses,
+    centers,
+  }
 }
 
-export async function getStudentsForExport(filters: { query?: string; courseId?: string }) {
+export async function getStudentsForExport(filters: {
+  query?: string
+  courseId?: string
+  centerId?: string
+  ids?: string[]
+}) {
   await requireAdmin()
-  const { where, query, courseId } = studentWhere(filters)
+  const { where, query, courseId, centerId } = studentWhere(filters)
 
-  const [students, course] = await Promise.all([
+  const [students, course, center] = await Promise.all([
     prisma.user.findMany({
       where,
       include: {
@@ -138,11 +214,26 @@ export async function getStudentsForExport(filters: { query?: string; courseId?:
       orderBy: { application: { submittedAt: "desc" } },
     }),
     courseId
-      ? prisma.course.findUnique({ where: { id: courseId }, select: { name: true } })
+      ? prisma.course.findUnique({
+          where: { id: courseId },
+          select: { name: true },
+        })
+      : null,
+    centerId
+      ? prisma.resourceCenter.findUnique({
+          where: { id: centerId },
+          select: { name: true },
+        })
       : null,
   ])
 
-  return { students, query, courseName: course?.name ?? "Todos os cursos" }
+  return {
+    students,
+    query,
+    courseName: course?.name ?? "Todos os cursos",
+    centerName: center?.name ?? "Todos os centros",
+    selectedCount: filters.ids?.length ?? 0,
+  }
 }
 
 export async function getStudentDetails(id: string) {
@@ -172,4 +263,42 @@ export async function getConfigurationData() {
   ])
 
   return { settings, courses, centers }
+}
+
+export async function getCourseSettingsData() {
+  await requireAdmin()
+  const [courses, centers, levels] = await Promise.all([
+    prisma.course.findMany({
+      where: { active: true },
+      include: {
+        academicLevel: { select: { id: true, name: true } },
+        resourceCenters: {
+          include: { resourceCenter: { select: { id: true, name: true } } },
+        },
+        _count: { select: { applications: true } },
+      },
+      orderBy: { name: "asc" },
+    }),
+    prisma.resourceCenter.findMany({
+      where: { active: true },
+      select: { id: true, name: true },
+      orderBy: { name: "asc" },
+    }),
+    prisma.academicLevel.findMany({
+      where: { active: true },
+      select: { id: true, name: true },
+      orderBy: { name: "asc" },
+    }),
+  ])
+  return { courses, centers, levels }
+}
+
+export async function getCenterSettingsData() {
+  await requireAdmin()
+  const centers = await prisma.resourceCenter.findMany({
+    where: { active: true },
+    include: { _count: { select: { applications: true, courses: true } } },
+    orderBy: [{ isMainCampus: "desc" }, { name: "asc" }],
+  })
+  return { centers }
 }

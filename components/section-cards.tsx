@@ -28,7 +28,7 @@ export function SectionCards({
       icon: UsersRound,
     },
     {
-      label: "Inscrições submetidas",
+      label: "Candidaturas submetidas",
       value: data.totalSubmitted,
       helper: "Curso e centro confirmados",
       icon: FileCheck2,
@@ -48,7 +48,7 @@ export function SectionCards({
   ]
   return (
     <section
-      aria-label="Resumo das inscrições"
+      aria-label="Resumo das candidaturas"
       className="grid grid-cols-1 gap-4 @xl/main:grid-cols-2 @4xl/main:grid-cols-4 "
     >
       {cards.map(({ label, value, helper, icon: Icon }) => (

@@ -92,6 +92,7 @@ export async function submitRegistration(
   const [course, center] = await Promise.all([
     prisma.course.findFirst({
       where: { id: application.data.courseId, active: true },
+      include: { resourceCenters: { select: { resourceCenterId: true } } },
     }),
     prisma.resourceCenter.findFirst({
       where: { id: application.data.resourceCenterId, active: true },
@@ -101,6 +102,17 @@ export async function submitRegistration(
   if (!course || !center) {
     return {
       error: "O curso ou centro selecionado já não está disponível.",
+      step: 2,
+      submissionId: Date.now(),
+    }
+  }
+  if (
+    !course.resourceCenters.some((link) => link.resourceCenterId === center.id)
+  ) {
+    return {
+      fieldErrors: {
+        resourceCenterId: ["Este centro não oferece o curso seleccionado."],
+      },
       step: 2,
       submissionId: Date.now(),
     }
@@ -137,7 +149,7 @@ export async function submitRegistration(
   })
 
   await createApplicationAccess(user.id)
-  redirect("/?step=curso&submitted=1")
+  redirect("/inscricao?step=curso&submitted=1")
 }
 
 export async function submitApplication(
@@ -147,7 +159,9 @@ export async function submitApplication(
   const user = await requireApplicant()
 
   if (user.application) {
-    return { error: "Esta inscrição já foi submetida e não pode ser alterada." }
+    return {
+      error: "Esta candidatura já foi submetida e não pode ser alterada.",
+    }
   }
 
   const period = await getRegistrationPeriod()
@@ -161,6 +175,7 @@ export async function submitApplication(
   const [course, center] = await Promise.all([
     prisma.course.findFirst({
       where: { id: parsed.data.courseId, active: true },
+      include: { resourceCenters: { select: { resourceCenterId: true } } },
     }),
     prisma.resourceCenter.findFirst({
       where: { id: parsed.data.resourceCenterId, active: true },
@@ -169,6 +184,15 @@ export async function submitApplication(
 
   if (!course || !center) {
     return { error: "O curso ou centro selecionado já não está disponível." }
+  }
+  if (
+    !course.resourceCenters.some((link) => link.resourceCenterId === center.id)
+  ) {
+    return {
+      fieldErrors: {
+        resourceCenterId: ["Este centro não oferece o curso seleccionado."],
+      },
+    }
   }
 
   await prisma.application.create({
@@ -179,7 +203,7 @@ export async function submitApplication(
     },
   })
 
-  redirect("/?step=curso&submitted=1")
+  redirect("/inscricao?step=curso&submitted=1")
 }
 
 export async function startNewRegistration() {

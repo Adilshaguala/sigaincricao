@@ -1,9 +1,9 @@
 import Link from "next/link"
-import { CheckCircle2, Clock3, FilePlus2, LockKeyhole } from "lucide-react"
+import { CheckCircle2, Clock3, LockKeyhole } from "lucide-react"
 
-import { startNewRegistration } from "@/app/actions"
 import { ApplicationForm } from "@/components/application-form"
 import { AuthShell } from "@/components/auth-shell"
+import { CloseApplicationButton } from "@/components/close-application-button"
 import { RegistrationForm } from "@/components/registration-form"
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert"
 import { Badge } from "@/components/ui/badge"
@@ -43,7 +43,7 @@ function PeriodNotice({ message }: { message: string }) {
   return (
     <Alert>
       <Clock3 />
-      <AlertTitle>Prazo de inscrições</AlertTitle>
+      <AlertTitle>Prazo de candidaturas</AlertTitle>
       <AlertDescription>{message}</AlertDescription>
     </Alert>
   )
@@ -66,8 +66,8 @@ export default async function ApplicationPage({
         <AuthShell
           title={
             period.state === "upcoming"
-              ? "As inscrições ainda não abriram"
-              : "As inscrições estão encerradas"
+              ? "As candidaturas ainda não abriram"
+              : "As candidaturas estão encerradas"
           }
           description="O formulário ficará disponível durante o período definido pelos serviços académicos."
         >
@@ -78,8 +78,8 @@ export default async function ApplicationPage({
     const { courses, centers } = await getCatalog()
     return (
       <AuthShell
-        title="Formulário de inscrição"
-        description="Preencha o formulário para efectuar a sua inscrição"
+        title="Formulário de candidatura"
+        description="Preencha o formulário para efectuar a sua candidatura"
       >
         <RegistrationForm courses={courses} centers={centers} />
       </AuthShell>
@@ -96,31 +96,31 @@ export default async function ApplicationPage({
 
   return (
     <AuthShell
-      title="A sua inscrição"
+      title="A sua candidatura"
       description="Consulte os dados da sua candidatura."
     >
       <div className="grid gap-6">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <Badge variant={submitted ? "default" : "secondary"}>
             {submitted ? <CheckCircle2 /> : <Clock3 />}
-            {submitted ? "Inscrição submetida" : "A aguardar submissão"}
+            {submitted ? "Candidatura submetida" : "A aguardar submissão"}
           </Badge>
         </div>
 
         {params.submitted === "1" && submitted && (
           <Alert role="status">
             <CheckCircle2 />
-            <AlertTitle>Inscrição submetida com sucesso</AlertTitle>
+            <AlertTitle>Candidatura submetida com sucesso</AlertTitle>
             <AlertDescription>
               Os seus dados estão agora bloqueados para edição.
             </AlertDescription>
           </Alert>
         )}
 
-        <nav aria-label="Dados da inscrição" className="flex flex-wrap gap-2">
+        <nav aria-label="Dados da candidatura" className="flex flex-wrap gap-2">
           <Button
             variant={activeStep === "dados" ? "default" : "outline"}
-            render={<Link href="/?step=dados" />}
+            render={<Link href="/inscricao?step=dados" />}
             nativeButton={false}
             aria-current={activeStep === "dados" ? "page" : undefined}
           >
@@ -128,16 +128,17 @@ export default async function ApplicationPage({
           </Button>
           <Button
             variant={activeStep === "curso" ? "default" : "outline"}
-            render={<Link href="/?step=curso" />}
+            render={<Link href="/inscricao?step=curso" />}
             nativeButton={false}
             aria-current={activeStep === "curso" ? "page" : undefined}
           >
             Curso e centro
           </Button>
+          <CloseApplicationButton />
         </nav>
 
         {activeStep === "dados" ? (
-          <Card >
+          <Card>
             <CardHeader>
               <CardTitle>Dados pessoais</CardTitle>
               <CardDescription>
@@ -193,7 +194,7 @@ export default async function ApplicationPage({
         ) : user.application ? (
           <Card>
             <CardHeader>
-              <CardTitle>Detalhes da inscrição</CardTitle>
+              <CardTitle>Detalhes da candidatura</CardTitle>
               <CardDescription>
                 A sua candidatura foi registada com sucesso.
               </CardDescription>
@@ -206,7 +207,11 @@ export default async function ApplicationPage({
             <CardContent>
               <Detail
                 label="Curso selecionado"
-                value={user.application.course.name}
+                value={
+                  user.application.course.plan
+                    ? `${user.application.course.name} — Plano ${user.application.course.plan}`
+                    : user.application.course.name
+                }
               />
               <Detail label="Sigla" value={user.application.course.shortName} />
               <Detail

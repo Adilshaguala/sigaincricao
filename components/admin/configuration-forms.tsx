@@ -39,8 +39,8 @@ export function RegistrationPeriodForm({
 
       <div className="grid gap-4 sm:grid-cols-2">
         <Field
-          label="Abertura das inscrições"
-          hint="Deixe vazio para permitir inscrições imediatamente."
+          label="Abertura das candidaturas"
+          hint="Deixe vazio para permitir candidaturas imediatamente."
           error={state.fieldErrors?.registrationStart?.[0]}
         >
           <Input
@@ -52,7 +52,7 @@ export function RegistrationPeriodForm({
           />
         </Field>
         <Field
-          label="Encerramento das inscrições"
+          label="Encerramento das candidaturas"
           hint="Deixe vazio para não definir uma data de encerramento."
           error={state.fieldErrors?.registrationEnd?.[0]}
         >
@@ -66,7 +66,7 @@ export function RegistrationPeriodForm({
         </Field>
       </div>
 
-      <div className="flex justify-end border-t border-slate-100 pt-5">
+      <div className="flex justify-end">
         <SubmitButton pendingLabel="A guardar...">
           <CalendarClock /> Guardar prazo
         </SubmitButton>

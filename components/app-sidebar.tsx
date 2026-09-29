@@ -1,31 +1,24 @@
 "use client"
 
 import type { ComponentProps } from "react"
+import Image from "next/image"
 import Link from "next/link"
-import {
-  GraduationCap,
-  LayoutDashboard,
-  Users,
-  Settings2,
-  ExternalLink,
-} from "lucide-react"
+import { LayoutDashboard, Users, ExternalLink } from "lucide-react"
+import { SettingsNav } from "@/components/admin/settings-nav"
 import { NavMain } from "@/components/nav-main"
 import { NavSecondary } from "@/components/nav-secondary"
 import { NavUser } from "@/components/nav-user"
+import { ThemeToggle } from "@/components/theme-toggle"
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
 } from "@/components/ui/sidebar"
 
 const navigation = [
   { title: "Dashboard", url: "/admin/dashboard", icon: <LayoutDashboard /> },
   { title: "Estudantes", url: "/admin/estudantes", icon: <Users /> },
-  { title: "Configurações", url: "/admin/configuracoes", icon: <Settings2 /> },
 ]
 
 export function AppSidebar({
@@ -36,26 +29,36 @@ export function AppSidebar({
 }) {
   return (
     <Sidebar collapsible="offcanvas" {...props}>
-      <SidebarHeader>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton
-              size="lg"
-              render={<Link href="/admin/dashboard" />}
-            >
-              <GraduationCap />
-              <span>SIGA · Inscrições</span>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
+      <SidebarHeader className="flex-row items-center justify-between">
+        <Link
+          href="/admin/dashboard"
+          className="flex min-w-0 items-center gap-2 px-2 py-1 text-sidebar-foreground"
+        >
+          <Image
+            src="/ISAD.png"
+            width={90}
+            height={53}
+            alt="ISAD"
+            sizes="90px"
+          />
+          <Image
+            src="/up_logo.png"
+            width={90}
+            height={53}
+            alt="Universidade Pedagógica"
+            sizes="90px"
+          />
+        </Link>
+        <ThemeToggle />
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={navigation} />
+        <SettingsNav />
         <NavSecondary
           className="mt-auto"
           items={[
             {
-              title: "Formulário de inscrição",
+              title: "Formulário de candidatura",
               url: "/",
               icon: <ExternalLink />,
             },

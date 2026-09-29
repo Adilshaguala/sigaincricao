@@ -12,43 +12,70 @@ enum ApplicationStatus {
 }
 
 model User {
-  id          String       @id @default(cuid())
-  nuit        String?      @unique
-  fullName    String
-  birthDate   DateTime
-  gender      String
-  nationality String
-  idNumber    String       @unique
-  phone       String
-  email       String?
-  province    String
-  district    String
-  address     String?
-  school      String?
-  academicLevel String?
-  trainingArea  String?
-  academicGroup String?
+  id              String       @id @default(cuid())
+  nuit            String?      @unique
+  fullName        String
+  birthDate       DateTime
+  gender          String
+  nationality     String
+  idNumber        String       @unique
+  phone           String
+  email           String?
+  province        String
+  district        String
+  address         String?
+  school          String?
+  academicLevel   String?
+  trainingArea    String?
+  academicGroup   String?
   educationCourse String?
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
-  application Application?
-  sessions    Session[]
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+  application     Application?
+  sessions        Session[]
 }
 
 model Course {
-  id           String        @id
-  name         String
-  shortName    String
-  active       Boolean       @default(true)
-  applications Application[]
+  id              String                 @id
+  name            String
+  shortName       String
+  plan            String?
+  duration        Int?
+  academicLevelId String?
+  active          Boolean                @default(true)
+  applications    Application[]
+  academicLevel   AcademicLevel?         @relation(fields: [academicLevelId], references: [id])
+  resourceCenters CourseResourceCenter[]
+
+  @@index([name, plan])
+  @@index([academicLevelId])
 }
 
 model ResourceCenter {
-  id           String        @id
+  id           String                 @id
   name         String
   location     String
-  active       Boolean       @default(true)
+  isMainCampus Boolean                @default(false)
+  active       Boolean                @default(true)
   applications Application[]
+  courses      CourseResourceCenter[]
+}
+
+model AcademicLevel {
+  id      String   @id
+  name    String   @unique
+  active  Boolean  @default(true)
+  courses Course[]
+}
+
+model CourseResourceCenter {
+  courseId         String
+  resourceCenterId String
+  course           Course         @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  resourceCenter   ResourceCenter @relation(fields: [resourceCenterId], references: [id], onDelete: Cascade)
+
+  @@id([courseId, resourceCenterId])
+  @@index([resourceCenterId])
 }
 
 model Application {

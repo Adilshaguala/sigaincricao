@@ -11,16 +11,19 @@ const HEADER_FILL = "FF0F172A"
 const ACCENT_FILL = "FF047857"
 const LIGHT_FILL = "FFF1F5F9"
 
-export async function GET(request: NextRequest) {
+async function createExport(filters: {
+  query?: string
+  courseId?: string
+  centerId?: string
+  ids?: string[]
+}) {
   const administrator = await getCurrentAdmin()
   if (!administrator) redirect("/admin")
 
-  const query = request.nextUrl.searchParams.get("q") ?? ""
-  const courseId = request.nextUrl.searchParams.get("courseId") ?? ""
-  const data = await getStudentsForExport({ query, courseId })
+  const data = await getStudentsForExport(filters)
 
   const workbook = new ExcelJS.Workbook()
-  workbook.creator = "SIGA — Sistema de Gestão de Inscrições"
+  workbook.creator = "SIGA — Sistema de Gestão de Candidaturas"
   workbook.created = new Date()
   workbook.modified = new Date()
 
@@ -31,25 +34,44 @@ export async function GET(request: NextRequest) {
   summary.columns = [{ width: 28 }, { width: 48 }]
   summary.mergeCells("A1:B1")
   summary.getCell("A1").value = "RELATÓRIO DE ESTUDANTES INSCRITOS"
-  summary.getCell("A1").font = { bold: true, color: { argb: "FFFFFFFF" }, size: 15 }
-  summary.getCell("A1").fill = { type: "pattern", pattern: "solid", fgColor: { argb: ACCENT_FILL } }
+  summary.getCell("A1").font = {
+    bold: true,
+    color: { argb: "FFFFFFFF" },
+    size: 15,
+  }
+  summary.getCell("A1").fill = {
+    type: "pattern",
+    pattern: "solid",
+    fgColor: { argb: ACCENT_FILL },
+  }
   summary.getCell("A1").alignment = { vertical: "middle", horizontal: "left" }
   summary.getRow(1).height = 34
 
   const summaryRows = [
     ["Total de estudantes", data.students.length],
     ["Curso", data.courseName],
+    ["Centro", data.centerName],
     ["Pesquisa aplicada", data.query || "Nenhuma"],
+    [
+      "Selecção",
+      data.selectedCount
+        ? `${data.students.length} estudante(s)`
+        : "Todos os resultados filtrados",
+    ],
     ["Exportado por", administrator.name],
     ["Data de exportação", new Date()],
   ]
 
   summary.addRows(summaryRows)
   summary.getColumn(1).font = { bold: true, color: { argb: "FF475569" } }
-  summary.getCell("B6").numFmt = "dd/mm/yyyy hh:mm"
+  summary.getCell("B8").numFmt = "dd/mm/yyyy hh:mm"
   summary.eachRow((row, rowNumber) => {
     if (rowNumber > 1 && rowNumber % 2 === 0) {
-      row.fill = { type: "pattern", pattern: "solid", fgColor: { argb: LIGHT_FILL } }
+      row.fill = {
+        type: "pattern",
+        pattern: "solid",
+        fgColor: { argb: LIGHT_FILL },
+      }
     }
   })
 
@@ -113,7 +135,11 @@ export async function GET(request: NextRequest) {
   const header = worksheet.getRow(1)
   header.height = 30
   header.font = { bold: true, color: { argb: "FFFFFFFF" }, size: 11 }
-  header.fill = { type: "pattern", pattern: "solid", fgColor: { argb: HEADER_FILL } }
+  header.fill = {
+    type: "pattern",
+    pattern: "solid",
+    fgColor: { argb: HEADER_FILL },
+  }
   header.alignment = { vertical: "middle", horizontal: "center" }
 
   worksheet.autoFilter = { from: "A1", to: "U1" }
@@ -126,7 +152,11 @@ export async function GET(request: NextRequest) {
     if (rowNumber > 1) {
       row.alignment = { vertical: "middle" }
       if (rowNumber % 2 === 0) {
-        row.fill = { type: "pattern", pattern: "solid", fgColor: { argb: "FFF8FAFC" } }
+        row.fill = {
+          type: "pattern",
+          pattern: "solid",
+          fgColor: { argb: "FFF8FAFC" },
+        }
       }
       row.eachCell((cell) => {
         cell.border = { bottom: { style: "hair", color: { argb: "FFE2E8F0" } } }
@@ -139,9 +169,34 @@ export async function GET(request: NextRequest) {
 
   return new Response(new Uint8Array(buffer), {
     headers: {
-      "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "Content-Type":
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       "Content-Disposition": `attachment; filename="estudantes-inscritos-${date}.xlsx"`,
       "Cache-Control": "private, no-store, max-age=0",
     },
   })
+}
+
+export async function GET(request: NextRequest) {
+  const params = request.nextUrl.searchParams
+  return createExport({
+    query: params.get("q") ?? "",
+    courseId: params.get("courseId") ?? "",
+    centerId: params.get("centerId") ?? "",
+    ids: params.has("id") ? [...new Set(params.getAll("id"))] : undefined,
+  })
+}
+
+export async function POST(request: NextRequest) {
+  const form = await request.formData()
+  const ids = [
+    ...new Set(
+      form
+        .getAll("id")
+        .filter((id): id is string => typeof id === "string" && id.length > 0)
+    ),
+  ]
+  if (!ids.length)
+    return new Response("Nenhum estudante seleccionado.", { status: 400 })
+  return createExport({ ids })
 }

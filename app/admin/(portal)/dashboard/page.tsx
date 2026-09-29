@@ -1,6 +1,7 @@
 import {
   ChartAreaInteractive,
   DistributionCharts,
+  GenderDistributionChart,
 } from "@/components/chart-area-interactive"
 import { DataTable } from "@/components/data-table"
 import { SectionCards } from "@/components/section-cards"
@@ -15,13 +16,31 @@ export default async function DashboardPage() {
     timeZone: "Africa/Maputo",
   })
   return (
-    <>
+    <main className="flex flex-col gap-6">
+      <section
+        aria-labelledby="dashboard-title"
+        className="flex flex-wrap items-start justify-between gap-3"
+      >
+        <div className="grid gap-1">
+          <h1
+            id="dashboard-title"
+            className="text-2xl font-semibold tracking-tight"
+          >
+            Visão geral
+          </h1>
+          <p className="text-sm text-muted-foreground">
+            Acompanhe as candidaturas submetidas e a procura por formação.
+          </p>
+        </div>
+      </section>
       <SectionCards data={data} />
-      <ChartAreaInteractive data={data.monthlyTrend} />
+      <section className="grid gap-6 @5xl/main:grid-cols-[minmax(0,1.65fr)_minmax(20rem,0.85fr)]">
+        <ChartAreaInteractive data={data.monthlyTrend} />
+        <GenderDistributionChart data={data.genderCounts} />
+      </section>
       <DistributionCharts
         courseCounts={data.courseCounts}
         centerCounts={data.centerCounts}
-        genderCounts={data.genderCounts}
       />
       <DataTable
         data={data.recentApplications.map((application) => ({
@@ -33,6 +52,6 @@ export default async function DashboardPage() {
           submittedAt: dateFormatter.format(application.submittedAt),
         }))}
       />
-    </>
+    </main>
   )
 }

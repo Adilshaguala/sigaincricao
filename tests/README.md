@@ -11,6 +11,9 @@ Com a aplicação em execução e Playwright e Microsoft Edge disponíveis:
 ```sh
 node tests/enrollment-selects.browser.mjs
 node tests/mobile-selects.browser.mjs
+node tests/admin-dashboard.browser.mjs
+node tests/admin-settings.browser.mjs
+node tests/catalog-form.browser.mjs
 ```
 
 Os testes também aceitam o caminho/URL do módulo Playwright como primeiro argumento
@@ -19,6 +22,9 @@ abertas e de pelo menos um curso e um centro activos. Não submete inscrições:
 verifica selectores, teclado, erros, preservação dos dados e ausência de gravações
 intermédias num ecrã de 390 px. O teste móvel usa emulação táctil e verifica
 os selectores nativos, incluindo a dependência província/distrito.
+
+Os testes administrativos requerem `ADMIN_USERNAME` e `ADMIN_PASSWORD` no `.env`.
+O teste de configurações cria dados temporários de curso/centro e remove-os no final.
 
 ## Nacionalidades
 

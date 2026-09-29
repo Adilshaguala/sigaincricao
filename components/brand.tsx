@@ -10,7 +10,7 @@ export function Brand({ href = "/" }: { light?: boolean; href?: string }) {
       nativeButton={false}
       aria-label="SIGA — Página inicial"
     >
-      <GraduationCap /> SIGA · Inscrições
+      <GraduationCap /> SIGA · Candidaturas
     </Button>
   )
 }

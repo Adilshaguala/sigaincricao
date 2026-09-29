@@ -27,7 +27,12 @@ export function ApplicationForm({
   courses,
   centers,
 }: {
-  courses: { id: string; name: string }[]
+  courses: {
+    id: string
+    name: string
+    plan: string | null
+    centerIds: string[]
+  }[]
   centers: { id: string; name: string; location: string }[]
 }) {
   const [pending, startTransition] = useTransition()
@@ -104,7 +109,12 @@ export function ApplicationForm({
           Os campos assinalados com * são obrigatórios.
         </FieldDescription>
         {state.error && !pending && (
-          <Alert className="max-w-md border-amber-200 bg-amber-50 text-amber-900 dark:border-amber-900 dark:bg-amber-950 dark:text-amber-50" id="application-error" tabIndex={-1} variant="destructive">
+          <Alert
+            className="max-w-md border-amber-200 bg-amber-50 text-amber-900 dark:border-amber-900 dark:bg-amber-950 dark:text-amber-50"
+            id="application-error"
+            tabIndex={-1}
+            variant="destructive"
+          >
             <CircleAlert />
             <AlertTitle>Não foi possível submeter</AlertTitle>
             <AlertDescription>{state.error}</AlertDescription>
@@ -124,7 +134,7 @@ export function ApplicationForm({
         <div className="flex justify-end">
           <Button type="submit" disabled={pending || unavailable}>
             {pending ? <Spinner /> : <ArrowRight />}
-            {pending ? "A submeter..." : "Submeter inscrição"}
+            {pending ? "A submeter..." : "Submeter candidatura"}
           </Button>
         </div>
       </form>

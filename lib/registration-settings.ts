@@ -48,8 +48,12 @@ export function parseMaputoDateTime(value: string) {
   return Number.isNaN(date.getTime()) ? null : date
 }
 
-export async function getRegistrationPeriod(now = new Date()): Promise<RegistrationPeriod> {
-  const settings = await prisma.systemSettings.findUnique({ where: { id: SETTINGS_ID } })
+export async function getRegistrationPeriod(
+  now = new Date()
+): Promise<RegistrationPeriod> {
+  const settings = await prisma.systemSettings.findUnique({
+    where: { id: SETTINGS_ID },
+  })
   const start = settings?.registrationStart ?? null
   const end = settings?.registrationEnd ?? null
 
@@ -58,7 +62,7 @@ export async function getRegistrationPeriod(now = new Date()): Promise<Registrat
       state: "upcoming",
       start,
       end,
-      message: `As inscrições abrem em ${formatRegistrationDate(start)}.`,
+      message: `As candidaturas abrem em ${formatRegistrationDate(start)}.`,
     }
   }
 
@@ -67,7 +71,7 @@ export async function getRegistrationPeriod(now = new Date()): Promise<Registrat
       state: "closed",
       start,
       end,
-      message: `O prazo de inscrições terminou em ${formatRegistrationDate(end)}.`,
+      message: `O prazo de candidaturas terminou em ${formatRegistrationDate(end)}.`,
     }
   }
 
@@ -76,7 +80,7 @@ export async function getRegistrationPeriod(now = new Date()): Promise<Registrat
     start,
     end,
     message: end
-      ? `As inscrições estão abertas até ${formatRegistrationDate(end)}.`
-      : "As inscrições estão abertas.",
+      ? `As candidaturas estão abertas até ${formatRegistrationDate(end)}.`
+      : "As candidaturas estão abertas.",
   }
 }

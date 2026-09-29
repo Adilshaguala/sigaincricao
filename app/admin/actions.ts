@@ -3,12 +3,8 @@
 import { redirect } from "next/navigation"
 import { z } from "zod"
 
-import {
-  clearAdminSession,
-  createAdminSession,
-  ensureDefaultAdministrator,
-  verifyPassword,
-} from "@/lib/admin-auth"
+import { clearAdminSession, createAdminSession } from "@/lib/admin-auth"
+import { verifyPassword } from "@/lib/password"
 import { prisma } from "@/lib/prisma"
 
 export type AdminLoginState = {
@@ -28,7 +24,7 @@ function textValue(formData: FormData, field: string) {
 
 export async function loginAdmin(
   _state: AdminLoginState,
-  formData: FormData,
+  formData: FormData
 ): Promise<AdminLoginState> {
   const parsed = loginSchema.safeParse({
     username: textValue(formData, "username"),
@@ -37,11 +33,6 @@ export async function loginAdmin(
 
   if (!parsed.success) {
     return { fieldErrors: parsed.error.flatten().fieldErrors }
-  }
-
-  const configured = await ensureDefaultAdministrator()
-  if (!configured) {
-    return { error: "As credenciais administrativas ainda não foram configuradas." }
   }
 
   const administrator = await prisma.administrator.findUnique({

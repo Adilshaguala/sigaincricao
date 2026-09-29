@@ -22,7 +22,7 @@ export function NavMain({
   const { setOpenMobile } = useSidebar()
   return (
     <SidebarGroup>
-      <SidebarGroupLabel>Gestão</SidebarGroupLabel>
+      <SidebarGroupLabel>Menu Principal</SidebarGroupLabel>
       <SidebarGroupContent>
         <SidebarMenu>
           {items.map((item) => {
