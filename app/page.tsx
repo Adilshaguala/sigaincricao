@@ -76,22 +76,14 @@ export default async function HomePage({
           >
 
             <Image
-              src="/up_logo.png"
+              src="/CEAD_Logo.svg"
               alt="Universidade Pedagógica de Maputo"
               width={112}
               height={64}
-              className="h-12 w-auto object-contain"
+              className="h-16 w-auto object-contain"
               priority
             />
             <Separator orientation="vertical" className="h-10" />
-            <Image
-              src="/cead_logo.png"
-              alt="Instituto Superior de Educação Aberta e à Distância"
-              width={128}
-              height={64}
-              className="h-12 w-auto object-contain"
-              priority
-            />
             <Image
               src="/ISAD.png"
               alt="Instituto Superior de Educação Aberta e à Distância"
@@ -120,8 +112,8 @@ export default async function HomePage({
                 A sua formação começa com uma candidatura.
               </h1>
               <p className="max-w-prose text-base leading-7 text-white/80 sm:text-lg">
-                Candidate-se aos cursos da UP-CEAD e escolha o centro de
-                recursos mais adequado para o seu acompanhamento académico.
+                Candidate-se aos cursos à Distância da Universidade Pedagógica de Maputo e escolha o Centro de
+                Recursos mais adequado para o seu acompanhamento académico.
               </p>
             </div>
 
@@ -300,7 +292,7 @@ export default async function HomePage({
               <div className="col-12 text-center">
                 <div className="copyright-area">
                   <small>
-                    Copyright © 2023 Designed by
+                    Copyright © 2026 Designed by
                     <a href="https://www.cead.up.ac.mz"> www.cead.up.ac.mz</a>.
                     Todos os direitos reservados.
                   </small>

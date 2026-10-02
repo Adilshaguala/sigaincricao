@@ -201,7 +201,7 @@ export function RegistrationForm({
         </FieldDescription>
         <Tabs
           value={step}
-          onValueChange={(value) => {
+          onValueChange={(value) => { 
             if (pending) return
             if (value === "dados") setStep("dados")
             else void continueToCourse()
