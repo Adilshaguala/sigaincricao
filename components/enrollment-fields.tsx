@@ -100,6 +100,7 @@ export function EnrollmentInput({
           <Input
             {...props}
             {...field}
+            className="bg-background border-2"
             onBlur={(event) => {
               field.onBlur()
               // Navigation validates explicitly. Avoid moving a clicked button
@@ -193,7 +194,8 @@ export function EnrollmentSelect({
               ref={field.ref}
               id={name}
               name={field.name}
-              className="w-full"
+              className="bg-background border-2 w-full"
+
               value={field.value}
               onChange={(event) => {
                 if (event.target.value !== field.value) {
@@ -256,7 +258,8 @@ export function EnrollmentSelect({
                 ref={field.ref}
                 id={name}
                 onBlur={field.onBlur}
-                className="w-full"
+                className="bg-background border-2 w-full"
+
                 aria-required
                 aria-invalid={fieldState.invalid}
                 aria-describedby={

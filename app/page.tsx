@@ -74,15 +74,7 @@ export default async function HomePage({
             className="flex items-center gap-3"
             aria-label="UP-CEAD — Página inicial"
           >
-            <Image
-              src="/ISAD.png"
-              alt="Instituto Superior de Educação Aberta e à Distância"
-              width={128}
-              height={64}
-              className="h-12 w-auto object-contain"
-              priority
-            />
-            <Separator orientation="vertical" className="h-10" />
+
             <Image
               src="/up_logo.png"
               alt="Universidade Pedagógica de Maputo"
@@ -91,8 +83,25 @@ export default async function HomePage({
               className="h-12 w-auto object-contain"
               priority
             />
+            <Separator orientation="vertical" className="h-10" />
+            <Image
+              src="/cead_logo.png"
+              alt="Instituto Superior de Educação Aberta e à Distância"
+              width={128}
+              height={64}
+              className="h-12 w-auto object-contain"
+              priority
+            />
+            <Image
+              src="/ISAD.png"
+              alt="Instituto Superior de Educação Aberta e à Distância"
+              width={128}
+              height={64}
+              className="h-12 w-auto object-contain"
+              priority
+            />
           </Link>
-          <Button render={<Link href="/inscricao" />} nativeButton={false}>
+          <Button render={<Link href="/inscricao" />} className="hidden md:flex" nativeButton={false}>
             Candidatar-me
             <ArrowRight data-icon="inline-end" />
           </Button>
@@ -199,7 +208,6 @@ export default async function HomePage({
                 Campus de Lhanguene, Avenida do Trabalho, nº 2482, Bairro
                 Chamanculo “C”, Maputo - Moçambique.
                 <br />
-                (+258) 84 90 01 80 4<br />
                 up.cead@gmail.com
               </p>
             </div>
@@ -225,15 +233,6 @@ export default async function HomePage({
                   target="_blank"
                 >
                   SIGEUP
-                </a>
-              </li>
-              <li>
-                <a
-                  className="text-decoration-none"
-                  href="https://old.ceadupm.up.ac.mz/"
-                  target="_blank"
-                >
-                  PLATAFORMA ANTIGA
                 </a>
               </li>
             </ul>

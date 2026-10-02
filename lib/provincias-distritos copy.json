@@ -1,0 +1,218 @@
+[
+  {
+    "provincia": "Cabo Delgado",
+    "distritos": [
+      "Ancuabe",
+      "Balama",
+      "Chiúre",
+      "Ibo",
+      "Macomia",
+      "Mecúfi",
+      "Meluco",
+      "Metuge",
+      "Mocímboa da Praia",
+      "Montepuez",
+      "Mueda",
+      "Muidumbe",
+      "Namuno",
+      "Nangade",
+      "Palma",
+      "Pemba",
+      "Quissanga"
+    ]
+  },
+  {
+    "provincia": "Gaza",
+    "distritos": [
+      "Bilene",
+      "Chibuto",
+      "Chicualacuala",
+      "Chigubo",
+      "Chongoene",
+      "Chókwè",
+      "Guijá",
+      "Limpopo",
+      "Mabalane",
+      "Mandlakaze",
+      "Mapai",
+      "Massangena",
+      "Massingir",
+      "Xai-Xai"
+    ]
+  },
+  {
+    "provincia": "Inhambane",
+    "distritos": [
+      "Funhalouro",
+      "Govuro",
+      "Homoíne",
+      "Inhambane",
+      "Inharrime",
+      "Inhassoro",
+      "Jangamo",
+      "Mabote",
+      "Massinga",
+      "Maxixe",
+      "Morrumbene",
+      "Panda",
+      "Vilankulo",
+      "Zavala"
+    ]
+  },
+  {
+    "provincia": "Manica",
+    "distritos": [
+      "Bárue",
+      "Chimoio",
+      "Gondola",
+      "Guro",
+      "Macate",
+      "Machaze",
+      "Macossa",
+      "Manica",
+      "Mossurize",
+      "Sussundenga",
+      "Tambara",
+      "Vanduzi"
+    ]
+  },
+  {
+    "provincia": "Maputo (Província)",
+    "distritos": [
+      "Boane",
+      "Magude",
+      "Manhiça",
+      "Marracuene",
+      "Matola",
+      "Matutuíne",
+      "Moamba",
+      "Namaacha"
+    ]
+  },
+  {
+    "provincia": "Maputo (Cidade)",
+    "distritos": [
+      "KaMavota",
+      "KaMaxakeni",
+      "KaMpfumo",
+      "KaMubukwana",
+      "KaNyaka",
+      "KaTembe",
+      "Nlhamankulu"
+    ]
+  },
+  {
+    "provincia": "Nampula",
+    "distritos": [
+      "Angoche",
+      "Eráti",
+      "Ilha de Moçambique",
+      "Lalaua",
+      "Larde",
+      "Liúpo",
+      "Malema",
+      "Meconta",
+      "Mecubúri",
+      "Memba",
+      "Mogincual",
+      "Mogovolas",
+      "Moma",
+      "Monapo",
+      "Mossuril",
+      "Muecate",
+      "Murrupula",
+      "Nacala Porto",
+      "Nacala-a-Velha",
+      "Nacarôa",
+      "Nampula",
+      "Rapale",
+      "Ribáuè"
+    ]
+  },
+  {
+    "provincia": "Niassa",
+    "distritos": [
+      "Chimbonila",
+      "Cuamba",
+      "Lago",
+      "Lichinga",
+      "Majune",
+      "Mandimba",
+      "Marrupa",
+      "Mavago",
+      "Maúa",
+      "Mecanhelas",
+      "Mecula",
+      "Metarica",
+      "Muembe",
+      "N'gauma",
+      "Nipepe",
+      "Sanga"
+    ]
+  },
+  {
+    "provincia": "Sofala",
+    "distritos": [
+      "Beira",
+      "Búzi",
+      "Caia",
+      "Chemba",
+      "Cheringoma",
+      "Chibabava",
+      "Dondo",
+      "Gorongosa",
+      "Machanga",
+      "Maringué",
+      "Marromeu",
+      "Muanza",
+      "Nhamatanda"
+    ]
+  },
+  {
+    "provincia": "Tete",
+    "distritos": [
+      "Angónia",
+      "Cahora Bassa",
+      "Changara",
+      "Chifunde",
+      "Chiuta",
+      "Dôa",
+      "Macanga",
+      "Marara",
+      "Marávia",
+      "Moatize",
+      "Mutarara",
+      "Mágoè",
+      "Tete",
+      "Tsangano",
+      "Zumbo"
+    ]
+  },
+  {
+    "provincia": "Zambézia",
+    "distritos": [
+      "Alto Molócuè",
+      "Chinde",
+      "Derre",
+      "Gilé",
+      "Gurué",
+      "Ile",
+      "Inhassunge",
+      "Luabo",
+      "Lugela",
+      "Maganja da Costa",
+      "Milange",
+      "Mocuba",
+      "Mocubela",
+      "Molumbo",
+      "Mopeia",
+      "Morrumbala",
+      "Mulevala",
+      "Namacurra",
+      "Namarrói",
+      "Nicoadala",
+      "Pebane",
+      "Quelimane"
+    ]
+  }
+]

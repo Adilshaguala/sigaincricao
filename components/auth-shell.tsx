@@ -1,4 +1,3 @@
-import { Brand } from "@/components/brand"
 import {
   Card,
   CardHeader,
@@ -18,22 +17,28 @@ export function AuthShell({
   children: React.ReactNode
 }) {
   return (
-    <main className="mx-auto grid min-h-svh max-w-3xl content-start gap-6 px-4 py-8 sm:px-6">
-      <header>
-        <div className="flex flex-row justify-between">
-          <img width="100px" src="/ISAD.png" />
-          <img width="100px" src="/up_logo.png" />
-        </div>
+    <main className="fixed inset-0 flex flex-col overflow-hidden ">
+      <header className="shrink-0 bg-background">
       </header>
-      <Card>
-        <CardHeader>
-          <CardTitle>
-            <h1>{title}</h1>
-          </CardTitle>
-          <CardDescription>{description}</CardDescription>
-        </CardHeader>
-        <CardContent>{children}</CardContent>
-      </Card>
+
+      <div className="min-h-0 flex-1 md:py-10 overflow-y-auto bg-[url(/UP.FEP.png)] bg-cover bg-center bg-fixed scroll-bar-hidden">
+        <Card className="mx-auto w-full max-w-4xl bg-secondary">
+          <CardHeader className="md:flex md:flex-row-reverse  justify-between i">
+            <div className="flex  flex-row gap-2 ">
+              <img width="100px" src="/up_logo.png" alt="Universidade Pedagógica" />
+              <img width="100px" src="/cead_logo.png" alt="ISAD" />
+              <img width="100px" src="/ISAD.png" alt="ISAD" />
+            </div>
+            <div>
+              <CardTitle>
+                <h1 className=" pt-10 md:pt-0 text-xl font-bold">{title}</h1>
+              </CardTitle>
+              <CardDescription>{description}</CardDescription>
+            </div>
+          </CardHeader>
+          <CardContent>{children}</CardContent>
+        </Card>
+      </div>
     </main>
   )
 }

@@ -194,7 +194,7 @@ export function RegistrationForm({
         onSubmit={handleSubmit}
         noValidate
         aria-busy={pending}
-        className="grid gap-6"
+        className="grid gap-6 px-4"
       >
         <FieldDescription>
           Os campos assinalados com * são obrigatórios.
@@ -210,7 +210,7 @@ export function RegistrationForm({
           <TabsList
             aria-label="Etapas da candidatura"
             activateOnFocus={false}
-            className="w-full"
+            className="w-full bg-primary"
           >
             <TabsTrigger value="dados" type="button" disabled={pending}>
               1. Dados pessoais
@@ -240,7 +240,7 @@ export function RegistrationForm({
 
           <TabsContent value="dados">
             <FieldGroup>
-              <FieldSet>
+              <FieldSet >
                 <FieldLegend>Identificação pessoal</FieldLegend>
                 <FieldDescription>
                   Preencha os dados conforme o seu documento de identificação.
@@ -262,6 +262,7 @@ export function RegistrationForm({
                       max={latestEligibleBirthDate()}
                     />
                     <EnrollmentSelect
+
                       name="gender"
                       label="Género"
                       placeholder="Selecione o género"
