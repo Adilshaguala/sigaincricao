@@ -320,8 +320,7 @@ export function CoursesSettingsTable({
         </div>
         <div className="mt-5 flex min-h-0 flex-1 flex-col overflow-hidden rounded-lg border">
           <Table
-            className="min-w-275"
-            containerClassName="min-h-0 flex-1 overflow-auto"
+            className="min-w-275 min-h-0 flex-1 overflow-auto"
             aria-label="Tabela de cursos"
           >
             <TableHeader className="sticky top-0 z-10 bg-background">

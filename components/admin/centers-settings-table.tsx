@@ -247,8 +247,7 @@ export function CentersSettingsTable({ centers }: { centers: Center[] }) {
         </div>
         <div className="mt-5 flex min-h-0 flex-1 flex-col overflow-hidden">
           <Table
-            className="min-w-160"
-            containerClassName="min-h-0 flex-1 overflow-auto"
+            className="min-w-160 min-h-0 flex-1 overflow-auto"
             aria-label="Tabela de centros de recursos"
           >
             <TableHeader className="sticky top-0 z-10 bg-background">

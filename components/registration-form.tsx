@@ -34,6 +34,7 @@ import {
   EnrollmentSelect,
   CourseFields,
 } from "@/components/enrollment-fields"
+import { RegistrationReviewDialog } from "@/components/registration-review-dialog"
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
 import { Spinner } from "@/components/ui/spinner"
@@ -64,6 +65,9 @@ export function RegistrationForm({
   centers: { id: string; name: string; location: string }[]
 }) {
   const [step, setStep] = useState("dados")
+  const [reviewValues, setReviewValues] = useState<RegistrationValues | null>(
+    null
+  )
   const [pending, startTransition] = useTransition()
   const submitting = useRef(false)
   const form = useForm<RegistrationValues>({
@@ -170,13 +174,21 @@ export function RegistrationForm({
       await continueToCourse()
       return
     }
+    // Valida e, se estiver tudo correcto, abre o diálogo de revisão
     await form.handleSubmit((values) => {
-      if (submitting.current) return
-      submitting.current = true
-      const data = new FormData()
-      Object.entries(values).forEach(([key, value]) => data.set(key, value))
-      startTransition(() => action(data))
+      setReviewValues(values)
     }, focusErrors)()
+  }
+
+  function confirmSubmit() {
+    if (!reviewValues || pending || submitting.current) return
+    submitting.current = true
+    const data = new FormData()
+    Object.entries(reviewValues).forEach(([key, value]) =>
+      data.set(key, value)
+    )
+    setReviewValues(null)
+    startTransition(() => action(data))
   }
 
   const errors = Object.entries(form.formState.errors).filter(
@@ -201,7 +213,7 @@ export function RegistrationForm({
         </FieldDescription>
         <Tabs
           value={step}
-          onValueChange={(value) => { 
+          onValueChange={(value) => {
             if (pending) return
             if (value === "dados") setStep("dados")
             else void continueToCourse()
@@ -240,7 +252,7 @@ export function RegistrationForm({
 
           <TabsContent value="dados">
             <FieldGroup>
-              <FieldSet >
+              <FieldSet>
                 <FieldLegend>Identificação pessoal</FieldLegend>
                 <FieldDescription>
                   Preencha os dados conforme o seu documento de identificação.
@@ -262,7 +274,6 @@ export function RegistrationForm({
                       max={latestEligibleBirthDate()}
                     />
                     <EnrollmentSelect
-
                       name="gender"
                       label="Género"
                       placeholder="Selecione o género"
@@ -448,6 +459,14 @@ export function RegistrationForm({
           </TabsContent>
         </Tabs>
       </form>
+
+      <RegistrationReviewDialog
+        values={reviewValues}
+        courses={courses}
+        centers={centers}
+        onCancel={() => setReviewValues(null)}
+        onConfirm={confirmSubmit}
+      />
     </FormProvider>
   )
 }

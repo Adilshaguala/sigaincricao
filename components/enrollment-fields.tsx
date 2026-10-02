@@ -351,7 +351,7 @@ export function CourseFields({
         options={courses.map((course) => ({
           value: course.id,
           label: course.plan
-            ? `${course.name} — Plano ${course.plan}`
+            ? `${course.name}`
             : course.name,
         }))}
         onChange={() => {

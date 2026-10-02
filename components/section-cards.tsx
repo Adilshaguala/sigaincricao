@@ -52,7 +52,7 @@ export function SectionCards({
       className="grid grid-cols-1 gap-4 @xl/main:grid-cols-2 @4xl/main:grid-cols-4 "
     >
       {cards.map(({ label, value, helper, icon: Icon }) => (
-        <Card key={label} className="@container/card">
+        <Card key={label} className="@container/card ">
           <CardHeader>
             <CardDescription>{label}</CardDescription>
             <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
@@ -64,8 +64,10 @@ export function SectionCards({
               </Badge>
             </CardAction>
           </CardHeader>
-          <CardFooter>
-            <CardDescription>{helper}</CardDescription>
+          <CardFooter className=" bg-primary/5 h-full text-white">
+            <CardDescription>
+              {helper}
+            </CardDescription>
           </CardFooter>
         </Card>
       ))}

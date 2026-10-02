@@ -244,12 +244,6 @@ export default async function ApplicationPage({
             </CardContent>
           </Card>
         )}
-        <Alert>
-          <AlertTitle>Precisa de ajuda?</AlertTitle>
-          <AlertDescription>
-            Contacte os serviços académicos do seu centro de recursos.
-          </AlertDescription>
-        </Alert>
       </div>
     </AuthShell>
   )
